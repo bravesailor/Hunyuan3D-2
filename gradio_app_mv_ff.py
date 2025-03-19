@@ -171,6 +171,9 @@ def _gen_shape(
         except Exception as e:
             raise gr.Error(f"Text to 3D is disable. Please enable it by `python gradio_app.py --enable_t23d`.")
         time_meta['text2image'] = time.time() - start_time
+        #added by xlm, save the generated image from text
+        image.save(os.path.join(save_folder, "txt2img.png"))
+
 
     # remove disk io to make responding faster, uncomment at your will.
     # image.save(os.path.join(save_folder, 'input.png'))
@@ -178,14 +181,22 @@ def _gen_shape(
         start_time = time.time()
         for k, v in image.items():
             if check_box_rembg or v.mode == "RGB":
+                #added by xlm, save the raw image
+                v.save(os.path.join(save_folder, f"{k}_input.png"))
                 img = rmbg_worker(v.convert('RGB'))
                 image[k] = img
+                #added by xlm, save the rmgb image
+                img.save(os.path.join(save_folder, f"{k}_rmbg_input.png"))
         time_meta['remove background'] = time.time() - start_time
-    else:
+    else:  #added by xlm
+        #added by xlm, save the raw image
+        image.save(os.path.join(save_folder, "raw_input.png"))
         if check_box_rembg or image.mode == "RGB":
             start_time = time.time()
             image = rmbg_worker(image.convert('RGB'))
             time_meta['remove background'] = time.time() - start_time
+            #added by xlm, save the rmbg image
+            image.save(os.path.join(save_folder, "rmbg_input.png"))
 
     # remove disk io to make responding faster, uncomment at your will.
     # image.save(os.path.join(save_folder, 'rembg.png'))
@@ -610,11 +621,11 @@ if __name__ == '__main__':
     # parser.add_argument("--subfolder", type=str, default='hunyuan3d-dit-v2-mini')
     # parser.add_argument("--texgen_model_path", type=str, default='tencent/Hunyuan3D-2')
 
-    # parser.add_argument("--model_path", type=str, default=external_model_v2_path)
-    # parser.add_argument("--subfolder", type=str, default=v2_subfoler)
+    parser.add_argument("--model_path", type=str, default=external_model_v2_path)
+    parser.add_argument("--subfolder", type=str, default=v2_subfoler)
 
-    parser.add_argument("--model_path", type=str, default=external_model_mv_path)
-    parser.add_argument("--subfolder", type=str, default=mv_subfoler)
+    # parser.add_argument("--model_path", type=str, default=external_model_mv_path)
+    # parser.add_argument("--subfolder", type=str, default=mv_subfoler)
     parser.add_argument("--texgen_model_path", type=str, default=external_model_v2_path)
     parser.add_argument('--port', type=int, default=8081)
     parser.add_argument('--host', type=str, default='0.0.0.0')
@@ -623,7 +634,7 @@ if __name__ == '__main__':
     parser.add_argument('--mc_algo', type=str, default='mc')
     parser.add_argument('--cache-path', type=str, default='gradio_cache')
     parser.add_argument('--enable_t23d', action='store_true', default=True)
-    parser.add_argument('--disable_tex', action='store_true')
+    parser.add_argument('--disable_tex', action='store_true', default=False)
     parser.add_argument('--compile', action='store_true')
     #added by xlm
     parser.add_argument('--queue_size', type=int, default=5)
