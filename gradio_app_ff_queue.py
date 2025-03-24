@@ -288,7 +288,8 @@ def build_app():
                     num_steps = gr.Slider(maximum=100, minimum=1, value=30, step=1, label='Inference Steps')
                     octree_resolution = gr.Dropdown([256, 384, 512, 768, 1024], value=256, label='Octree Resolution')
                     cfg_scale = gr.Number(value=5.5, label='Guidance Scale')
-                    max_facenum_slider = gr.Slider(maximum=200000, minimum=20000, value=40000, step=1000, label='Number of Faces')
+                    # max_facenum_slider = gr.Slider(maximum=200000, minimum=20000, value=40000, step=1000, label='Number of Faces')
+                    max_facenum_slider = gr.Slider(maximum=200000, minimum=20000, value=200000, step=1000, label='Number of Faces')
                     seed = gr.Slider(maximum=1e7, minimum=0, value=1234, label='Seed')
 
                 with gr.Group():

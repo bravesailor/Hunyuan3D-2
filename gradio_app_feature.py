@@ -263,6 +263,7 @@ def generation_all(
     check_box_rembg=False,
     num_chunks=200000,
     randomize_seed: bool = False,
+    max_facenun = 40000,
 ):
     start_time_0 = time.time()
     mesh, image, save_folder, stats, seed = _gen_shape(
@@ -289,7 +290,8 @@ def generation_all(
     # stats['time']['postprocessing'] = time.time() - tmp_time
 
     tmp_time = time.time()
-    mesh = face_reduce_worker(mesh)
+    #modified by xlm
+    mesh = face_reduce_worker(mesh,max_facenun)
     logger.info("---Face Reduction takes %s seconds ---" % (time.time() - tmp_time))
     stats['time']['face reduction'] = time.time() - tmp_time
 
@@ -472,7 +474,7 @@ def build_app():
                             reduce_face = gr.Checkbox(label='Simplify Mesh', value=False, min_width=100)
                             export_texture = gr.Checkbox(label='Include Texture', value=False,
                                                          visible=False, min_width=100)
-                        target_face_num = gr.Slider(maximum=1000000, minimum=100, value=10000,
+                        target_face_num = gr.Slider(maximum=1000000, minimum=100, value=200000,
                                                     label='Target Face Number')
                         with gr.Row():
                             confirm_export = gr.Button(value="Transform", min_width=100)
@@ -573,6 +575,7 @@ def build_app():
                 check_box_rembg,
                 num_chunks,
                 randomize_seed,
+                target_face_num,
             ],
             outputs=[file_out, file_out2, html_gen_mesh, stats, seed]
         ).then(
@@ -669,12 +672,17 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", type=str, default='tencent/Hunyuan3D-2mini')
-    parser.add_argument("--subfolder", type=str, default='hunyuan3d-dit-v2-mini-turbo')
-    parser.add_argument("--texgen_model_path", type=str, default='tencent/Hunyuan3D-2')
-    parser.add_argument('--port', type=int, default=8080)
+    # parser.add_argument("--model_path", type=str, default='tencent/Hunyuan3D-2mini')
+    # parser.add_argument("--subfolder", type=str, default='hunyuan3d-dit-v2-mini-turbo')
+    # parser.add_argument("--texgen_model_path", type=str, default='tencent/Hunyuan3D-2')
+
+    parser.add_argument("--model_path", type=str, default=external_model_v2_path)
+    parser.add_argument("--subfolder", type=str, default=v2_subfoler)
+    parser.add_argument("--texgen_model_path", type=str, default=external_model_v2_path)
+
+    parser.add_argument('--port', type=int, default=8082)
     parser.add_argument('--host', type=str, default='0.0.0.0')
-    parser.add_argument('--device', type=str, default='cuda')
+    parser.add_argument('--device', type=str, default='cuda:2')
     parser.add_argument('--mc_algo', type=str, default='mc')
     parser.add_argument('--cache-path', type=str, default='gradio_cache')
     parser.add_argument('--enable_t23d', action='store_true')
@@ -765,6 +773,7 @@ if __name__ == '__main__':
 
     floater_remove_worker = FloaterRemover()
     degenerate_face_remove_worker = DegenerateFaceRemover()
+    # modified by xlm, we need to reduce face count dynamiclly,
     face_reduce_worker = FaceReducer()
 
     # https://discuss.huggingface.co/t/how-to-serve-an-html-file/33921/2

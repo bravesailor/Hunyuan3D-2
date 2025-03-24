@@ -123,6 +123,7 @@ class FaceReducer:
         max_facenum: int = 40000
     ) -> Union[pymeshlab.MeshSet, trimesh.Trimesh]:
         ms = import_mesh(mesh)
+        # modifiied by xlm, disable it temporarily
         ms = reduce_face(ms, max_facenum=max_facenum)
         mesh = export_mesh(mesh, ms)
         return mesh
