@@ -314,6 +314,9 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda:2")
     parser.add_argument("--limit-model-concurrency", type=int, default=1)
     parser.add_argument('--enable_tex', action='store_true', default=True)
+    # added by xlm, face count
+    parser.add_argument("--face_count", type=int, default="200000")
+
     args = parser.parse_args()
     logger.info(f"args: {args}")
 
