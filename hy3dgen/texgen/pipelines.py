@@ -48,7 +48,7 @@ class Hunyuan3DTexGenConfig:
 
 class Hunyuan3DPaintPipeline:
     @classmethod
-    def from_pretrained(cls, model_path):
+    def from_pretrained(cls, model_path, device='cuda'):
         original_model_path = model_path
         if not os.path.exists(model_path):
             # try local path
@@ -68,14 +68,22 @@ class Hunyuan3DPaintPipeline:
                                                                    allow_patterns=["hunyuan3d-paint-v2-0/*"])
                     delight_model_path = os.path.join(model_path, 'hunyuan3d-delight-v2-0')
                     multiview_model_path = os.path.join(model_path, 'hunyuan3d-paint-v2-0')
-                    return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+                    conf = Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path)
+                    conf.device = device
+                    # return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+                    return cls(conf)
                 except ImportError:
                     logger.warning(
                         "You need to install HuggingFace Hub to load models from the hub."
                     )
                     raise RuntimeError(f"Model path {model_path} not found")
             else:
-                return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+                # return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+
+                conf = Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path)
+                conf.device = device
+                # return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+                return cls(conf)
         else:
             delight_model_path = os.path.join(model_path, 'hunyuan3d-delight-v2-0')
             multiview_model_path = os.path.join(model_path, 'hunyuan3d-paint-v2-0')
@@ -83,7 +91,10 @@ class Hunyuan3DPaintPipeline:
                 raise RuntimeError(f"Model path {delight_model_path} not found")
             if not os.path.exists(multiview_model_path):
                 raise RuntimeError(f"Model path {multiview_model_path} not found")
-            return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+            conf = Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path)
+            conf.device = device
+            # return cls(Hunyuan3DTexGenConfig(delight_model_path, multiview_model_path))
+            return cls(conf)
 
     def __init__(self, config):
         self.config = config
