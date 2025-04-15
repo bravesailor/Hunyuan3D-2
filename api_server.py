@@ -206,7 +206,7 @@ class ModelWorker:
             params['octree_resolution'] = params.get("octree_resolution", 128)
             params['num_inference_steps'] = params.get("num_inference_steps", 5)
             params['guidance_scale'] = params.get('guidance_scale', 5.0)
-            params['mc_algo'] = 'dmc'
+            params['mc_algo'] = 'mc'
             import time
             start_time = time.time()
             mesh = self.pipeline(**params)[0]
@@ -300,7 +300,7 @@ async def status(uid: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--port", type=str, default="8081")
+    parser.add_argument("--port", type=int, default=8081)
     parser.add_argument("--model_path", type=str, default='tencent/Hunyuan3D-2mini')
     parser.add_argument("--tex_model_path", type=str, default='tencent/Hunyuan3D-2')
     parser.add_argument("--device", type=str, default="cuda")
