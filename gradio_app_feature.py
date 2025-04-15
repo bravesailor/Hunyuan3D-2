@@ -675,7 +675,7 @@ external_model_v2_path='/data/models/Hunyuan3D-2'
 v2_subfoler = "hunyuan3d-dit-v2-0-turbo"
 
 external_model_mv_path='/data/models/Hunyuan3D-2mv'
-mv_subfoler = "hunyuan3d-dit-v2-mv"
+mv_subfoler = "hunyuan3d-dit-v2-mv-turbo"
 
 if __name__ == '__main__':
     import argparse
