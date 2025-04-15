@@ -689,7 +689,7 @@ if __name__ == '__main__':
     parser.add_argument("--subfolder", type=str, default=v2_subfoler)
     parser.add_argument("--texgen_model_path", type=str, default=external_model_v2_path)
 
-    parser.add_argument('--port', type=int, default=8082)
+    parser.add_argument('--port', type=int, default=8086)
     parser.add_argument('--host', type=str, default='0.0.0.0')
     parser.add_argument('--device', type=str, default='cuda:3')
     parser.add_argument('--mc_algo', type=str, default='mc')
