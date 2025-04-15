@@ -163,10 +163,10 @@ class ModelWorker:
             device=device,
         )
         self.pipeline.enable_flashvdm(mc_algo='mc')
-        # self.pipeline_t2i = HunyuanDiTPipeline(
-        #     'Tencent-Hunyuan/HunyuanDiT-v1.1-Diffusers-Distilled',
-        #     device=device
-        # )
+        self.pipeline_t2i = HunyuanDiTPipeline(
+            'Tencent-Hunyuan/HunyuanDiT-v1.1-Diffusers-Distilled',
+            device=device
+        )
         if enable_tex:
             self.pipeline_tex = Hunyuan3DPaintPipeline.from_pretrained(tex_model_path)
 
@@ -297,7 +297,7 @@ async def status(uid: str):
         return JSONResponse(response, status_code=200)
 
 external_model_v2_path='/data/models/Hunyuan3D-2'
-v2_subfoler = "hunyuan3d-dit-v2-0"
+v2_subfoler = "hunyuan3d-dit-v2-0-turbo"
 
 external_model_mv_path='/data/models/Hunyuan3D-2mv'
 mv_subfoler = "hunyuan3d-dit-v2-mv"

@@ -26,8 +26,11 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 import uuid
-
 from hy3dgen.shapegen.utils import logger
+
+from trimesh import repair
+
+
 
 MAX_SEED = 1e7
 
@@ -83,6 +86,12 @@ def gen_save_folder(max_size=200):
 
 
 def export_mesh(mesh, save_folder, textured=False, type='glb'):
+    # trimesh.repair.fill_holes(mesh)
+    # trimesh.repair.fix_winding(mesh)
+    # trimesh.repair.fix_inversion(mesh)
+    # trimesh.repair.fix_normals(mesh)
+
+
     if textured:
         path = os.path.join(save_folder, f'textured_mesh.{type}')
     else:
@@ -663,7 +672,7 @@ def build_app():
     return demo
 
 external_model_v2_path='/data/models/Hunyuan3D-2'
-v2_subfoler = "hunyuan3d-dit-v2-0"
+v2_subfoler = "hunyuan3d-dit-v2-0-turbo"
 
 external_model_mv_path='/data/models/Hunyuan3D-2mv'
 mv_subfoler = "hunyuan3d-dit-v2-mv"
@@ -682,7 +691,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--port', type=int, default=8082)
     parser.add_argument('--host', type=str, default='0.0.0.0')
-    parser.add_argument('--device', type=str, default='cuda:2')
+    parser.add_argument('--device', type=str, default='cuda:3')
     parser.add_argument('--mc_algo', type=str, default='mc')
     parser.add_argument('--cache-path', type=str, default='gradio_cache')
     parser.add_argument('--enable_t23d', action='store_true', default=True)

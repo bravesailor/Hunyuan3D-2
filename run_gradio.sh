@@ -2,7 +2,7 @@
 # python gradio_app_mv_ff.py --model_path '/data/models/Hunyuan3D-2' --subfolder "hunyuan3d-dit-v2-0"  --port 8080 --device 'cuda:0'
 
 model_path='/data/models/Hunyuan3D-2'
-sub_folder='hunyuan3d-dit-v2-0'
+sub_folder='hunyuan3d-dit-v2-0-turbo'
 texgen_model_path='/data/models/Hunyuan3D-2'
 port=8080
 device='cuda:2'

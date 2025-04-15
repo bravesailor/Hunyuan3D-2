@@ -1,5 +1,5 @@
 model_path='/data/models/Hunyuan3D-2mv'
-sub_folder='hunyuan3d-dit-v2-mv'
+sub_folder='hunyuan3d-dit-v2-mv-turbo'
 texgen_model_path='/data/models/Hunyuan3D-2'
 port=8081
 device='cuda:1'
